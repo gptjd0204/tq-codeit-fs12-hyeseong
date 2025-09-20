@@ -3,12 +3,9 @@
 import TodoItem from "@/app/_components/TodoItem";
 import { fetchTodos, toggleTodoStatus, toggleTodoLike } from "@/api/todos";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import Pagination from "@/components/Pagination";
 
 export default function TodoList() {
-  const [currentPage, setCurrentPage] = useState(1);
-
   const {
     data: todos,
     isPending,
@@ -47,7 +44,7 @@ export default function TodoList() {
         return {
           ...old,
           todos: old.todos.map((todo) =>
-            todo.id === newTodo.id ? { ...todo, liked: !todo.liked } : todo,
+            todo.id === newTodo.id ? { ...todo, liked: !todo.liked } : todo
           ),
         };
       });
