@@ -9,7 +9,7 @@ export default function LoadMorePage() {
   const {
     data: allTodos = [],
     fetchNextPage,
-    hasNextPage,
+    hasNextPage, // getNextPageParam에 의해 결정됨
     isFetchingNextPage,
     status,
     error,
@@ -43,7 +43,13 @@ export default function LoadMorePage() {
           {allTodos.length === 0 ? (
             <div className="p-4 text-center">할 일이 없습니다.</div>
           ) : (
-            allTodos.map((todo) => <TodoItem key={todo.id} todo={todo} />)
+            allTodos.pages.map((page, index) => (
+              <div key={index}>
+                {page.todos.map((todo) => (
+                  <TodoItem key={todo.id} todo={todo} />
+                ))}
+              </div>
+            ))
           )}
         </div>
 
@@ -51,7 +57,6 @@ export default function LoadMorePage() {
           <div className="text-center mt-4">
             <button
               onClick={() => fetchNextPage()}
-              disabled={isFetchingNextPage}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400"
             >
               {isFetchingNextPage ? "로딩 중..." : "더 보기"}
