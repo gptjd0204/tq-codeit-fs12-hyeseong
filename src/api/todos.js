@@ -13,7 +13,7 @@ export const fetchTodos = async () => {
 
 // 할 일 상세 조회
 export const fetchTodo = async (id) => {
-  const response = await fetch(`${API_URL}/${id}`);
+  const response = await fetch(`${API_URL}1/${id}`);
   if (!response.ok) {
     throw new Error("할 일을 찾을 수 없습니다.");
   }
