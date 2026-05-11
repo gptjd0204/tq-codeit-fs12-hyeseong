@@ -25,7 +25,7 @@ export default function TodoForm() {
 
     try {
       await handleAddTodo(title);
-      setTitle(""); // 입력 필드 초기화
+      // setTitle(""); // 입력 필드 초기화
     } catch (err) {
       console.error("할 일 추가 중 오류 발생:", err);
     }
