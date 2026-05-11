@@ -11,7 +11,7 @@
       "id": 2
     },
     {
-      "title": "테스트",
+      "title": "테스트1",
       "completed": false,
       "id": 3
     },
@@ -19,11 +19,6 @@
       "title": "테스트 2",
       "completed": false,
       "id": 4
-    },
-    {
-      "title": "테스트 3",
-      "completed": false,
-      "id": 5
     }
   ]
 }

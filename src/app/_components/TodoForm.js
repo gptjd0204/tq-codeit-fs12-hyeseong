@@ -1,31 +1,32 @@
 "use client";
 
 import { addTodo } from "@/api/todos";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 export default function TodoForm() {
   const [title, setTitle] = useState("");
-
   const queryClient = useQueryClient();
 
-  const handleAddTodo = async (title) => {
-    try {
+  const { mutate: mutateAddTodo, isPending: isAdding } = useMutation({
+    mutationFn: async (title) => {
       await addTodo(title);
+    },
+    onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["todos"] });
-    } catch (err) {
-      console.error("할 일 추가 중 오류 발생:", err);
-      setError("할 일을 추가하는데 실패했습니다.");
-    }
-  };
+    },
+    onError: () => {
+      alert("할 일을 추가하는데 실패했습니다.");
+    },
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim()) return;
 
     try {
-      await handleAddTodo(title);
-      // setTitle(""); // 입력 필드 초기화
+      mutateAddTodo(title);
+      setTitle(""); // 입력 필드 초기화
     } catch (err) {
       console.error("할 일 추가 중 오류 발생:", err);
     }
@@ -45,8 +46,9 @@ export default function TodoForm() {
         <button
           type="submit"
           className="px-4 py-2 bg-blue-500 text-white cursor-pointer"
+          disabled={isAdding}
         >
-          추가
+          {isAdding ? "추가중..." : "추가"}
         </button>
       </div>
     </form>
