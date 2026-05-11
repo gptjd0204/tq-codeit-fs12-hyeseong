@@ -4,15 +4,17 @@ import TodoItem from "@/app/_components/TodoItem";
 import { fetchTodos, toggleTodoStatus, toggleTodoLike } from "@/api/todos";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Pagination from "@/components/Pagination";
+import { useState } from "react";
 
 export default function TodoList() {
+  const [currentPage, setCurrentPage] = useState(1);
   const {
-    data: todos,
+    data: todosData,
     isPending,
     error,
   } = useQuery({
-    queryKey: ["todos"],
-    queryFn: () => fetchTodos(),
+    queryKey: ["todos", currentPage],
+    queryFn: () => fetchTodos({ page: currentPage }),
     meta: {
       name: "todos 홈",
     },
@@ -44,7 +46,7 @@ export default function TodoList() {
         return {
           ...old,
           todos: old.todos.map((todo) =>
-            todo.id === newTodo.id ? { ...todo, liked: !todo.liked } : todo
+            todo.id === newTodo.id ? { ...todo, liked: !todo.liked } : todo,
           ),
         };
       });
@@ -79,7 +81,7 @@ export default function TodoList() {
       </div>
     );
 
-  // const { todos, totalPages } = todosData;
+  const { todos, totalPages } = todosData;
 
   return (
     <div>
@@ -99,11 +101,11 @@ export default function TodoList() {
       </div>
 
       {/* 페이지네이션 UI */}
-      {/* <Pagination
+      <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
-      /> */}
+      />
     </div>
   );
 }
