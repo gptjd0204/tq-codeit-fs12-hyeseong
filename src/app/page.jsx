@@ -1,35 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import TodoList from "./_components/TodoList";
 import { fetchTodos } from "@/api/todos";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
-  const [todos, setTodos] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const loadTodos = async () => {
-    try {
-      const todos = await fetchTodos();
-      setTodos(todos);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadTodos();
-  }, []);
+  const {
+    data: todos,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["todos"],
+    queryFn: async () => {
+      return await fetchTodos();
+    },
+  });
 
   if (isLoading)
     return (
       <div className="container mx-auto px-4 py-8 text-center">로딩 중...</div>
     );
 
-  if (error)
+  if (isError)
     return (
       <div className="container mx-auto px-4 py-8 text-center text-red-500">
         {error}
